@@ -1,0 +1,11 @@
+{
+    "Prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner))",
+    "Width": 512,
+    "Height": 512,
+    "Samples": 1,
+    "NumInferenceSteps": 20,
+    "SafetyChecker": "no",
+    "EnhancePrompt": "yes",
+    "GuidanceScale": 7.5,
+    "MultiLingual": "no"
+}
