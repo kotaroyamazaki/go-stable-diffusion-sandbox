@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go-stable-diffusion-sandbox/config"
 	"go-stable-diffusion-sandbox/pkg/stablediffusion"
+	"sync"
 
 	"io"
 	"net/http"
@@ -42,31 +43,38 @@ func main() {
 		return
 	}
 
+	var wg sync.WaitGroup
 	for _, imageURL := range response.Output {
-		parsedURL, err := url.Parse(imageURL)
-		if err != nil {
-			fmt.Println("URL parsing error:", err)
-			return
-		}
-		// パスからファイルの拡張子を取得
-		ext := path.Ext(parsedURL.Path)
+		wg.Add(1)
+		go func(URL string) { // ゴルーチン内でURLを参照するために引数で渡す
+			defer wg.Done()
 
-		// 画像をダウンロード
-		// ファイル名はタイムスタンプなどを使ってユニークなものにする
-		fileName := fmt.Sprintf("%d%s", time.Now().Unix(), ext)
-		file, err := os.Create("outputs/" + fileName)
-		if err != nil {
-			panic(err)
-		}
-		defer file.Close()
+			parsedURL, err := url.Parse(URL)
+			if err != nil {
+				fmt.Println("URL parsing error:", err)
+				return
+			}
+			// パスからファイルの拡張子を取得
+			ext := path.Ext(parsedURL.Path)
 
-		resp, err := http.Get(imageURL)
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-			return
-		}
-		defer resp.Body.Close()
+			// 画像をダウンロード
+			// ファイル名はタイムスタンプなどを使ってユニークなものにする
+			fileName := fmt.Sprintf("%d%s", time.Now().Unix(), ext)
+			file, err := os.Create("outputs/" + fileName)
+			if err != nil {
+				panic(err)
+			}
+			defer file.Close()
 
-		io.Copy(file, resp.Body)
+			resp, err := http.Get(URL)
+			if err != nil {
+				fmt.Printf("Error: %v\n", err)
+				return
+			}
+			defer resp.Body.Close()
+
+			io.Copy(file, resp.Body)
+		}(imageURL)
 	}
+	wg.Wait()
 }
