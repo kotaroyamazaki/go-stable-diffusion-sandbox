@@ -1,8 +1,8 @@
 {
-    "Prompt": "anime ((beautiful money cyberpunk bird with purple body))",
+    "Prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner))",
     "Width": 512,
     "Height": 512,
-    "Samples": 4,
+    "Samples": 1,
     "NumInferenceSteps": 20,
     "SafetyChecker": "no",
     "EnhancePrompt": "yes",
