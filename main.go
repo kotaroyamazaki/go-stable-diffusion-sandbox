@@ -44,9 +44,10 @@ func main() {
 	}
 
 	var wg sync.WaitGroup
-	for _, imageURL := range response.Output {
+	for index, imageURL := range response.Output {
+		fmt.Println("Downloading", imageURL)
 		wg.Add(1)
-		go func(URL string) { // ゴルーチン内でURLを参照するために引数で渡す
+		go func(URL string, idx int) { // ゴルーチン内でURLを参照するために引数で渡す
 			defer wg.Done()
 
 			parsedURL, err := url.Parse(URL)
@@ -59,7 +60,7 @@ func main() {
 
 			// 画像をダウンロード
 			// ファイル名はタイムスタンプなどを使ってユニークなものにする
-			fileName := fmt.Sprintf("%d%s", time.Now().Unix(), ext)
+			fileName := fmt.Sprintf("%d-%d%s", time.Now().Unix(), idx, ext)
 			file, err := os.Create("outputs/" + fileName)
 			if err != nil {
 				panic(err)
@@ -74,7 +75,7 @@ func main() {
 			defer resp.Body.Close()
 
 			io.Copy(file, resp.Body)
-		}(imageURL)
+		}(imageURL, index)
 	}
 	wg.Wait()
 }
