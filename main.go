@@ -42,18 +42,15 @@ func main() {
 		return
 	}
 
-	for _, v := range response.Output {
-		imageURL := v
-		//		imageURL  の拡張子を取得
-		// URL解析
+	for _, imageURL := range response.Output {
 		parsedURL, err := url.Parse(imageURL)
 		if err != nil {
 			fmt.Println("URL parsing error:", err)
 			return
 		}
-
 		// パスからファイルの拡張子を取得
 		ext := path.Ext(parsedURL.Path)
+
 		// 画像をダウンロード
 		// ファイル名はタイムスタンプなどを使ってユニークなものにする
 		fileName := fmt.Sprintf("%d%s", time.Now().Unix(), ext)
