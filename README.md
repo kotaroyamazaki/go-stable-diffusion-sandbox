@@ -9,7 +9,6 @@
 設定ファイル config.json は、画像生成リクエストのパラメータを指定します。以下はそのフォーマットの例です。
 
 ```json
-Copy code
 {
   "Prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner))",
   "Width": 512,
