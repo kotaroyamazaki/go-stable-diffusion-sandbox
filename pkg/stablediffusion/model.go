@@ -1,24 +1,41 @@
 package stablediffusion
 
 type RequestParams struct {
-	Key               string  `json:"key"`
-	Prompt            string  `json:"prompt"`
-	NegativePrompt    *string `json:"negative_prompt,omitempty"`
-	Width             int     `json:"width,omitempty"`
-	Height            int     `json:"height,omitempty"`
-	Samples           int     `json:"samples,omitempty"`
-	NumInferenceSteps int     `json:"num_inference_steps,omitempty"`
-	SafetyChecker     string  `json:"safety_checker,omitempty"`
-	EnhancePrompt     string  `json:"enhance_prompt,omitempty"`
-	Seed              *int    `json:"seed,omitempty"`
-	GuidanceScale     float64 `json:"guidance_scale,omitempty"`
-	MultiLingual      string  `json:"multi_lingual,omitempty"`
-	Panorama          string  `json:"panorama,omitempty"`
-	SelfAttention     string  `json:"self_attention,omitempty"`
-	Upscale           string  `json:"upscale,omitempty"`
-	EmbeddingsModel   *string `json:"embeddings_model,omitempty"`
-	Webhook           *string `json:"webhook,omitempty"`
-	TrackID           *string `json:"track_id,omitempty"`
+	Key string `json:"key"`
+	// Text prompt with description of the things you want in the image to be generated.
+	Prompt string `json:"prompt"`
+	// Items you don't want in the image.
+	NegativePrompt *string `json:"negative_prompt,omitempty"`
+	// Max Height: Width: 1024x1024.
+	Width int `json:"width,omitempty"`
+	// Max Height: Width: 1024x1024.
+	Height int `json:"height,omitempty"`
+	// Number of images to be returned in response. The maximum value is 4.
+	Samples int `json:"samples,omitempty"`
+	// Number of denoising steps. Available values: 21, 31, 41, 51.
+	NumInferenceSteps int `json:"num_inference_steps,omitempty"`
+	// A checker for NSFW images. If such an image is detected, it will be replaced by a blank image.
+	SafetyChecker string `json:"safety_checker,omitempty"`
+	// Enhance prompts for better results; default: yes, options: yes/no.
+	EnhancePrompt string `json:"enhance_prompt,omitempty"`
+	// Seed is used to reproduce results, same seed will give you same image in return again. Pass null for a random number.
+	Seed *int `json:"seed,omitempty"`
+	// Scale for classifier-free guidance (minimum: 1; maximum: 20).
+	GuidanceScale float64 `json:"guidance_scale,omitempty"`
+	// Allow multi lingual prompt to generate images. Use "no" for the default English.
+	MultiLingual string `json:"multi_lingual,omitempty"`
+	// Set this parameter to "yes" to generate a panorama image.
+	Panorama string `json:"panorama,omitempty"`
+	// If you want a high quality image, set this parameter to "yes". In this case the image generation will take more time.
+	SelfAttention string `json:"self_attention,omitempty"`
+	// Set this parameter to "yes" if you want to upscale the given image resolution two times (2x). If the requested resolution is 512 x 512 px, the generated image will be 1024 x 1024 px.
+	Upscale string `json:"upscale,omitempty"`
+	// This is used to pass an embeddings model (embeddings_model_id).
+	EmbeddingsModel *string `json:"embeddings_model,omitempty"`
+	// Set an URL to get a POST API call once the image generation is complete.
+	Webhook *string `json:"webhook,omitempty"`
+	// This ID is returned in the response to the webhook API call. This will be used to identify the webhook request.
+	TrackID *string `json:"track_id,omitempty"`
 }
 
 type ResponseModel struct {
