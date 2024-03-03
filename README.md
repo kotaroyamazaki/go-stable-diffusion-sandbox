@@ -4,6 +4,14 @@
 
 このプロジェクトは、Stable Diffusion API を利用して画像生成リクエストを行う Go 言語のクライアントです。設定ファイルからリクエストパラメータを読み込み、指定されたプロンプトに基づいて画像を生成します。
 
+## 前準備
+
+Stable Diffusion API キーの設定
+
+```bash
+export STABLE_DIFFUSION_API_KEY='xxxx'
+```
+
 ## 設定ファイル
 
 設定ファイル config.json は、画像生成リクエストのパラメータを指定します。以下はそのフォーマットの例です。
