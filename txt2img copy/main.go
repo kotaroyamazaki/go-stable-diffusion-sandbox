@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go-stable-diffusion-sandbox/config"
 	"go-stable-diffusion-sandbox/pkg/stablediffusion"
+
 	"sync"
 
 	"io"
@@ -24,7 +25,7 @@ func main() {
 	client := stablediffusion.New(apiKey)
 
 	configPath := "config.json"
-	params, err := config.LoadConfig(configPath)
+	params, err := config.LoadConfigToTxt2ImgParams(configPath)
 	if err != nil {
 		fmt.Printf("Failed to load config: %v\n", err)
 		return

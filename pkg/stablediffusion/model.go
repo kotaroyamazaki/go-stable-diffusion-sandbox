@@ -1,6 +1,6 @@
 package stablediffusion
 
-type RequestParams struct {
+type Txt2ImgRequestParams struct {
 	Key string `json:"key"`
 	// Text prompt with description of the things you want in the image to be generated.
 	Prompt string `json:"prompt"`
@@ -36,6 +36,25 @@ type RequestParams struct {
 	Webhook *string `json:"webhook,omitempty"`
 	// This ID is returned in the response to the webhook API call. This will be used to identify the webhook request.
 	TrackID *string `json:"track_id,omitempty"`
+}
+
+type Img2imgRequestParams struct {
+	Key               string  `json:"key"`                           // Your API Key used for request authorization.
+	Prompt            string  `json:"prompt"`                        // Text prompt with description of the things you want in the image to be generated.
+	NegativePrompt    *string `json:"negative_prompt,omitempty"`     // Items you don't want in the image.
+	InitImage         string  `json:"init_image"`                    // Link to the Initial Image.
+	Width             int     `json:"width,omitempty"`               // Max Height: Width: 1024x1024.
+	Height            int     `json:"height,omitempty"`              // Number of images to be returned in response. The maximum value is 4.
+	Samples           int     `json:"samples,omitempty"`             // Number of denoising steps. Available values: 21, 31, 41, 51.
+	NumInferenceSteps int     `json:"num_inference_steps,omitempty"` // A checker for NSFW images. If such an image is detected, it will be replaced by a blank image.
+	SafettyChecker    string  `json:"safety_checker,omitempty"`      // Enhance prompts for better results; default: yes, options: yes/no.
+	EnhancePrompt     string  `json:"enhance_prompt,omitempty"`      // Scale for classifier-free guidance (minimum: 1; maximum: 20).
+	GuidanceScale     float64 `json:"guidance_scale,omitempty"`      // Prompt strength when using init image. 1.0 corresponds to full destruction of information in the init image.
+	Strength          float64 `json:"strength,omitempty"`            // Seed is used to reproduce results, same seed will give you same image in return again. Pass null for a random number.
+	Seed              *int    `json:"seed,omitempty"`                // Get response as base64 string, pass init_image as base64 string, to get base64 response. default: "no", options: yes/no
+	Base64            string  `json:"base64,omitempty"`              // Set an URL to get a POST API call once the image generation is complete.
+	Webhook           *string `json:"webhook,omitempty"`             // This ID is returned in the response to the webhook API call. This will be used to identify the webhook request.
+	TrackID           *string `json:"track_id,omitempty"`
 }
 
 type ResponseModel struct {

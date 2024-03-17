@@ -9,7 +9,8 @@ import (
 )
 
 type Client interface {
-	Text2Image(params *RequestParams) (*ResponseModel, error)
+	Text2Image(params *Txt2ImgRequestParams) (*ResponseModel, error)
+	Image2Image(params *Img2imgRequestParams) (*ResponseModel, error)
 }
 
 type client struct {
@@ -24,8 +25,42 @@ func New(apiKey string) Client {
 	}
 }
 
-func (c *client) Text2Image(params *RequestParams) (*ResponseModel, error) {
+func (c *client) Text2Image(params *Txt2ImgRequestParams) (*ResponseModel, error) {
 	endpoint := "/v3/text2img"
+	params.Key = c.APIKey // APIキーをパラメータに設定
+
+	payloadBytes, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(fmt.Sprintf("%s%s", c.BaseURL, endpoint), "application/json", bytes.NewBuffer(payloadBytes))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("status code: %d", resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	print(body)
+
+	var responseModel ResponseModel
+	err = json.Unmarshal(body, &responseModel)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responseModel, nil
+}
+
+func (c *client) Image2Image(params *Img2imgRequestParams) (*ResponseModel, error) {
+	endpoint := "/v3/img2img"
 	params.Key = c.APIKey // APIキーをパラメータに設定
 
 	payloadBytes, err := json.Marshal(params)
