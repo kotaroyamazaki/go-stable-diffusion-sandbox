@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go-stable-diffusion-sandbox/config"
+	"go-stable-diffusion-sandbox/pkg/discord"
 	"go-stable-diffusion-sandbox/pkg/stablediffusion"
 
 	"sync"
@@ -24,6 +25,23 @@ func main() {
 	}
 	client := stablediffusion.New(apiKey)
 
+	// discordに画像を送信する
+	discordToken := os.Getenv("DISCORD_BOT_TOKEN")
+	if discordToken == "" {
+		fmt.Println("DISCORD_BOT_TOKEN is not set")
+		return
+	}
+	discordChannelID := os.Getenv("DISCORD_CHANNEL_ID")
+	if discordChannelID == "" {
+		fmt.Println("DISCORD_CHANNEL_ID is not set")
+		return
+	}
+	discordClient, err := discord.New(discordToken)
+	if err != nil {
+		fmt.Println("Error creating Discord client:", err)
+		return
+	}
+
 	configPath := "config.json"
 	params, err := config.LoadConfigToTxt2ImgParams(configPath)
 	if err != nil {
@@ -44,9 +62,20 @@ func main() {
 		return
 	}
 
+	var negativePrompt string
+	if params.NegativePrompt != nil {
+		negativePrompt = *params.NegativePrompt
+	}
+	if err := discordClient.SendMessage(discordChannelID, fmt.Sprintf("- Prompt: %s\n- Negative Prompt: %s\n- Seed: %d\n- Model: %s", params.Prompt, negativePrompt, response.Meta.Seed, response.Meta.Model)); err != nil {
+		fmt.Println("Error sending message to Discord:", err)
+	}
+
 	var wg sync.WaitGroup
 	for index, imageURL := range response.Output {
 		fmt.Println("Downloading", imageURL)
+		if err := discordClient.SendMessage(discordChannelID, imageURL); err != nil {
+			fmt.Println("Error sending message to Discord:", err)
+		}
 		wg.Add(1)
 		go func(URL string, idx int) { // ゴルーチン内でURLを参照するために引数で渡す
 			defer wg.Done()
