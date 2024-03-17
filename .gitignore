@@ -2,6 +2,6 @@ outputs/*.png
 outputs/*.jpg
 txt2img/outputs/*.png
 txt2img/outputs/*.jpg
-img2txt/outputs/*.png
-img2txt/outputs/*.jpg
+img2img/outputs/*.png
+img2img/outputs/*.jpg
 config.json
